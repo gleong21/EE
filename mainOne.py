@@ -2,6 +2,7 @@
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import matplotlib
 import sklearn
 import numpy
 from sklearn.linear_model import LinearRegression
@@ -9,6 +10,8 @@ sklearn.linear_model.LinearRegression()
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+
 from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 
@@ -21,10 +24,17 @@ datasetThree = pd.read_csv('/Users/gienn/PycharmProjects/pythonProject/nba_elo_l
 X4 = datasetThree.iloc[:, :-1].values
 y4 = datasetThree.iloc[:, 1].values
 
-x = dataset[["teamAST", "teamTO", "teamSTL", "teamBLK", "teamFG%", "teamTRB", "team3P%", "result"]]
+x = dataset[["teamAST", "teamTO", "teamSTL", "teamBLK", "teamFG%", "teamTRB", "team3P%", "teamEFG%", "teamOREB%", "teamOrtg", "teamDrtg", "teamRslt", "teamSTL/TO", "result"]]
+xColumnNames = ["teamAST", "teamTO", "teamSTL", "teamBLK", "teamFG%", "teamTRB", "team3P%", "teamEFG%", "teamOREB%", "teamOrtg", "teamDrtg", "teamRslt", "teamSTL/TO", "result"]
+
 y = dataset[["points"]]
-x1 = dataset[["opptAST", "opptTO", "opptSTL", "opptBLK", "opptFG%", "opptTRB", "oppt3P%", "result"]]
+x1 = dataset[["opptAST", "opptTO", "opptSTL", "opptBLK", "opptFG%", "opptTRB", "oppt3P%", "opptEFG%", "opptOREB%", "opptOrtg", "opptDrtg", "opptRslt", "opptSTL/TO", "result"]]
+xColumnNamesAway = ["opptAST", "opptTO", "opptSTL", "opptBLK", "opptFG%", "opptTRB", "oppt3P%", "opptEFG%", "opptOREB%", "opptOrtg", "opptDrtg", "opptRslt", "opptSTL/TO", "result"]
+
 y1 = dataset[["awayPoints"]]
+
+
+
 
 # print(x)
 # print(dataset.shape)
@@ -51,142 +61,107 @@ from sklearn.linear_model import LinearRegression
 regressor = LinearRegression()
 regressorOne = LinearRegression()
 print(type(X_test))
-regressor.fit(X_train.iloc[:, 0:6], y_train)
-regressorOne.fit(X1_train.iloc[:, 0:6], y1_train)
+regressor.fit(X_train.iloc[:, 0:12], y_train)
+regressorOne.fit(X1_train.iloc[:, 0:12], y1_train)
 print(regressor.intercept_)
 print(regressor.coef_)
 
-y_pred = regressor.predict(X_test.iloc[:, 0:6])
-y1_pred = regressor.predict(X1_test.iloc[:, 0:6])
+y_pred = regressor.predict(X_test.iloc[:, 0:12])
+y1_pred = regressor.predict(X1_test.iloc[:, 0:12])
 print('Predicted response:', y_pred, sep='\n')
 print('Predicted response:', y1_pred, sep='\n')
 print(X_test)
-# print(y_pred.size)
-# print(y1_pred.size)
 winListTwo = []
 for x in range(0, len(y_pred)):
     if y_pred[x] > y1_pred[x]:
-        winListTwo.append("Win")
+        winListTwo.append(1)
     else:
-        winListTwo.append("Loss")
-print(winListTwo)
+        winListTwo.append(0)
 print(type(X_test["result"]))
 winListThree = X_test["result"]
 listing = winListThree.tolist()
-# winList = X_test["result"]
-# print(len(winList))
-# print(len(winListTwo))
-# print(type(winList))
-# # print(winList[1])
-print(listing)
 totalNum = 0
 for z in range(0, len(X_test)):
     if listing[z] == winListTwo[z]:
         totalNum = totalNum + 1
 print(totalNum)
 
+print(regressor.score(X_test.iloc[:, 0:12], y_test))
+
+print(X_train["teamTO"].to_numpy())
+print(y_test.size)
 
 
-# datasetOne = pd.read_csv('/Users/gienn/PycharmProjects/pythonProject/nba_elo_latest.csv', usecols=collist)
-# X1 = datasetOne.iloc[:, :-1].values
-# y1 = datasetOne.iloc[:, 1].values
-#
-# y_pred = regressor.predict(X1)
-# df = pd.DataFrame({'Actual': y1, 'Predicted': y_pred})
-# test = df.iloc[: , 1].values
-# print(test)
-# print(df)
-#
-# X2 = datasetTwo.iloc[:, :-1].values
-# y2 = datasetTwo.iloc[:, 1].values
-# regressorOne = LinearRegression()
-#
-# regressorOne.fit(X2, y2)
-# print(regressorOne.intercept_)
-# print(regressorOne.coef_)
-#
-# datasetThree = pd.read_csv('/Users/gienn/PycharmProjects/pythonProject/nba_elo_latest.csv', usecols=collistTwo)
-# X3 = datasetThree.iloc[:, :-1].values
-# y3 = datasetThree.iloc[:, 1].values
-# print(X3)
-# print(y3)
-#
-# y_predOne = regressorOne.predict(X3)
-# dfOne = pd.DataFrame({'Actual': y3, 'Predicted': y_predOne})
-# testOne = dfOne.iloc[: , 1].values
-# print(testOne)
-# # print(dfOne)
-#
-# winListTwo = []
-# for x in range(0, len(X4)):
-#     if X4[x] > y4[x]:
-#         winListTwo.append("W")
-#     else:
-#         winListTwo.append("L")
-# print(winListTwo)
-#
-# winList = []
-# for x in range(0, len(test)):
-#     if test[x] > testOne[x]:
-#         winList.append("W")
-#     else:
-#         winList.append("L")
-# print(winList)
-# prediction = 0
-# for x in range(0, len(winList)):
-#     if winList[x] == winListTwo[x]:
-#         prediction = prediction + 1
-# print(prediction)
-#
-# print(test[32])
-# print(testOne[32])
+# ax.plot(X_test["teamTO"].to_numpy(),y_pred,c='r')
+# ax.set_ylim(50)
+# ax.set_ylim(ymin=14)
+# ax.set_xlim(xmin=70)
+# ax.yticks([90, 100, 110, 120, 130, 140])
 
+# plt.scatter(, color='black')
+coeff = [1.709e-1, 5.512e-1, 6.741e-1,2.257e-2, -7.624e1, 7.586e-1, -2.595e1,4.698e1,-5.861e1,7.644e-1, 1.366e-1,-1.043]
+coeffTest = []
+intercept =[]
+coeffTestAway = []
+interceptAway = []
+print(1.709e-1)
 
+for z in range(14):
+    regr = linear_model.LinearRegression()
+    # print(z)
+    # print(xColumnNames[z])
+    x_train_changed = X_train[xColumnNames[z]]
+    x_train_changed = x_train_changed.values.reshape(-1,1)
+    regr.fit(x_train_changed, y_train)
+    # print(regr.coef_)
+    print(r2_score(x_train_changed, y_train))
+    coeffTest.append(regr.coef_)
+    intercept.append(regr.intercept_)
+for o in range(14):
+    regrOne = linear_model.LinearRegression()
+    # print(z)
+    # print(xColumnNamesAway[o])
+    x_train_changed1 = X1_train[xColumnNamesAway[o]]
+    x_train_changed1 = x_train_changed1.values.reshape(-1,1)
+    regrOne.fit(x_train_changed, y1_train)
+    # print(regrOne.coef_)
+    coeffTestAway.append(regrOne.coef_)
+    interceptAway.append(regrOne.intercept_)
+# ymin, ymax = plt.ylim()
+print(coeffTest[1][0])
+ax = plt.subplot(2, 1, 1)
+# m, b = np.linearfit(X_test["teamTO"].to_numpy(),y_test.to_numpy(), 1)
+plt.scatter(X_train["teamDrtg"].to_numpy(),y_train.to_numpy(),c='r')
+print(type(X_train["teamDrtg"].to_numpy()))
+testingArray = np.array(X_train["teamDrtg"])
+plt.plot(testingArray, (coeffTest[10][0]*testingArray + intercept[10][0]))
+plt.title("teamDrtg vs Points")
 
+ax.set_xlabel("teamDrtg")
+ax.set_ylabel("Points")
 
+fig = matplotlib.pyplot.gcf()
 
+fig.set_size_inches(12.5, 10.5, forward=True)
 
-
-
-
-# # Load the diabetes dataset
-# diabetes_X, diabetes_y = np.loadtxt('Untitled spreadsheet - Sheet1.csv', delimiter=',')
-# # Use only one feature
-# diabetes_X = diabetes_X[:, np.newaxis, 2]
-#
-# # Split the data into training/testing sets
-# diabetes_X_train = diabetes_X[:-20]
-# diabetes_X_test = diabetes_X[-20:]
-#
-# # Split the targets into training/testing sets
-# diabetes_y_train = diabetes_y[:-20]
-# diabetes_y_test = diabetes_y[-20:]
-#
-# # Create linear regression object
-# regr = linear_model.LinearRegression()
-#
-# # Train the model using the training sets
-# regr.fit(diabetes_X_train, diabetes_y_train)
-#
-# # Make predictions using the testing set
-# diabetes_y_pred = regr.predict(diabetes_X_test)
-#
-# # The coefficients
-# print('Coefficients: \n', regr.coef_)
-# # The mean squared error
-# print('Mean squared error: %.2f'
-#       % mean_squared_error(diabetes_y_test, diabetes_y_pred))
-# # The coefficient of determination: 1 is perfect prediction
-# print('Coefficient of determination: %.2f'
-#       % r2_score(diabetes_y_test, diabetes_y_pred))
-#
-# # Plot outputs
-# plt.scatter(diabetes_X_test, diabetes_y_test,  color='black')
-# plt.plot(diabetes_X_test, diabetes_y_pred, color='blue', linewidth=3)
-#
-# plt.xticks(())
-# plt.yticks(())
-#
 # plt.show()
-#
-# # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+ax1 = plt.subplot(2, 1, 2)
+# m, b = np.linearfit(X_test["teamTO"].to_numpy(),y_test.to_numpy(), 1)
+plt.scatter(X_train["teamRslt"].to_numpy(),y_train.to_numpy(),c='r')
+print(type(X_train["teamRslt"].to_numpy()))
+testingArray = np.array(X_train["teamRslt"])
+ax1.set_xlabel("teamRslt")
+ax1.set_ylabel("Points")
+plt.plot(testingArray, (coeffTest[11][0]*testingArray + intercept[11][0]))
+plt.title("teamRslt vs Points")
+fig = matplotlib.pyplot.gcf()
+
+fig.tight_layout()
+plt.savefig("plot6.png")
+
+plt.show()
+
+
+
+

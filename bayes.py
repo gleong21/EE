@@ -8,45 +8,17 @@ dataset2 = pd.read_csv('/Users/gienn/PycharmProjects/pythonProject/2016-17_teamB
 
 recentHPerformance = pd.DataFrame()
 recentAPerformance = pd.DataFrame()
-# print(dataset.iloc[:, 0:51])
-# print(dataset.iloc[:, 51:102])
+dataset1 = dataset.loc[:, ["teamAST", "teamTO%", "teamBLK", "teamEFG%", "team3P%", "teamFT%","teamOREB%", "teamOrtg", "teamDrtg", "teamFTM", "teamFT%", "teamRslt", "teamSTL/TO"]]
 
-
-# def splitData(data):
-#     recentHPerformance = data.iloc[:, 1:51]
-#     recentAPerformance = data.iloc[:, 51:]
-#     return recentHPerformance, recentAPerformance
-# print(splitData(dataset)[1])
-# # print(recentHPerformance)
-# # print(recentAPerformance)
-# total = pd.concat([splitData(dataset)[0], splitData(dataset)[1]])
-# print(total)
-# # print(recentHPerformance)
-# # print(recentAPerformance)
-
-# wine = datasets.load_wine()
-#
-# # print the names of the 13 features
-# # print ("Features: ", wine.feature_names)
-dataset1 = dataset.loc[:, ["teamAST", "teamTO", "teamSTL", "teamBLK", "teamFG%", "teamTRB", "team3P%"]]
-
-# print the label type of wine(class_0, class_1, class_2)
-# print ("Labels: ", wine.target_names)
 print(dataset.shape)
-# print(dataset['teamRslt'])
-# print(dataset.loc[:, ["teamAST", "teamTO", "teamSTL", "teamBLK", "teamPF"]])
-# print(wine.data.shape)
-# print(wine.data[0:5])
-# print(wine.target)
-# print(wine)
+
 
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(dataset1, dataset["result"], test_size=0.3,random_state=109) # 70% training and 30% test
+X_train, X_test, y_train, y_test = train_test_split(dataset1, dataset["result"], test_size=0.2,random_state=0) # 70% training and 30% test
 
-
-# Split dataset into training set and test set
+print(X_test.shape)
 
 
 #Import Gaussian Naive Bayes model
